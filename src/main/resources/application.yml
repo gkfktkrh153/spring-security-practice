@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+#    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true

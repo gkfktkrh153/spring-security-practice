@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.demo.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +17,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Controller;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
+
     private static final String[] AUTH_WHITELIST = {
             "/",
             "/h2-console/**",
@@ -41,7 +47,15 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .formLogin(form -> form.loginPage("/login-form")
                                        .loginProcessingUrl("/login")
-                                       .defaultSuccessUrl("/main"));
+                                       .defaultSuccessUrl("/main"))
+                .oauth2Login(oauth2Login ->
+                        oauth2Login.loginPage("/login-form")
+                                .userInfoEndpoint(userInfoEndpointConfig ->
+                                        userInfoEndpointConfig.userService(principalOauth2UserService)
+
+                                )
+                                .defaultSuccessUrl("/main")
+                );
         return http.build();
     }
 

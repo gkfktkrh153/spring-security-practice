@@ -1,10 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.auth.PrincipalDetail;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +32,8 @@ public class IndexController {
 		return "common";
 	}
 	@GetMapping("/user")
-	public @ResponseBody String user() {
+	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+		System.out.println("principal detail: " + principalDetail.getUser());
 		return "user";
 	}
 	
@@ -38,7 +43,7 @@ public class IndexController {
 		return "admin";
 	}
 
-	//@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
 	@GetMapping("/manager")
 	public @ResponseBody String manager() {
 		return "manager";
@@ -47,6 +52,11 @@ public class IndexController {
 	public @ResponseBody String login() {
 		System.out.println("login");
 		return "login";
+	}
+	@GetMapping("/logout")
+	public @ResponseBody String logout() {
+		System.out.println("logout");
+		return "logout";
 	}
 
 

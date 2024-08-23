@@ -16,6 +16,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"><br/>
     <button>로그인</button>
 </form>
+<a href="/oauth2/authorization/google">구글로그인</a>
 <a href="/join-form">회원가입</a>
 </body>
 </html>
